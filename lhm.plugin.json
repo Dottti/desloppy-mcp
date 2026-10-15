@@ -1,0 +1,227 @@
+{
+  "identifier": "dottti-desloppy",
+  "name": "Desloppy",
+  "version": "0.4.0",
+  "author": "Dottti",
+  "authorUrl": "https://github.com/Dottti",
+  "category": "productivity",
+  "cloudEndpoint": "https://desloppy.com/mcp",
+  "homepage": "https://desloppy.com",
+  "icon": "https://desloppy.com/icon.png",
+  "description": "Find the lines that make your writing sound like AI, and fix them in your own voice. AI score, line-level fixes, document checks and before/after compare. OAuth sign-in, free key with just an email.",
+  "tags": [
+    "writing",
+    "ai-detection",
+    "editing",
+    "humanize",
+    "productivity"
+  ],
+  "tools": [
+    {
+      "name": "check_writing",
+      "description": "Full check: does this read as AI-written, which passages to rewrite first, and how to fix each problem.\nReturns verdict, ai_score (0 human .. 1 AI), passes (true = good to go), summary_markdown (a ready-made\nsummary), rewrite_first, top_fixes, voice_tips and line-numbered findings. `kind`: school_essay | essay | presentation | email | social | fiction | general | auto (guess)",
+      "inputSchema": {
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "kind": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "school_essay",
+              "essay",
+              "presentation",
+              "email",
+              "social",
+              "fiction",
+              "general"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "max_findings": {
+            "default": 60,
+            "title": "Max Findings",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "type": "object",
+        "title": "check_writingArguments"
+      }
+    },
+    {
+      "name": "quick_fixes",
+      "description": "Instant rule-based check (no detector, free): AI phrases and patterns for this kind of writing, each with a\nline number and a plain fix, plus style signals and readability tips. Suited to quick checks while editing. `kind`: school_essay | essay | presentation | email | social | fiction | general | auto (guess)",
+      "inputSchema": {
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "kind": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "school_essay",
+              "essay",
+              "presentation",
+              "email",
+              "social",
+              "fiction",
+              "general"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "max_findings": {
+            "default": 60,
+            "title": "Max Findings",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "type": "object",
+        "title": "quick_fixesArguments"
+      }
+    },
+    {
+      "name": "ai_score",
+      "description": "AI-detector score only: overall verdict, confidence and a score per ~300-word chunk (0 = human, 1 = AI).\nMax 20,000 words per call. `kind`: school_essay | essay | presentation | email | social | fiction | general | auto (guess)",
+      "inputSchema": {
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "kind": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "school_essay",
+              "essay",
+              "presentation",
+              "email",
+              "social",
+              "fiction",
+              "general"
+            ],
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "type": "object",
+        "title": "ai_scoreArguments"
+      }
+    },
+    {
+      "name": "check_file",
+      "description": "Full Desloppy check of a document: .docx, .pptx (slides + speaker notes), .pdf, .txt, .md. Give `path` when the\nserver runs on the same machine, or `file_base64` + `filename` otherwise. Returns the check_writing result plus\nthe extracted text's word count. `kind`: school_essay | essay | presentation | email | social | fiction | general | auto (guess)",
+      "inputSchema": {
+        "properties": {
+          "path": {
+            "default": "",
+            "title": "Path",
+            "type": "string"
+          },
+          "file_base64": {
+            "default": "",
+            "title": "File Base64",
+            "type": "string"
+          },
+          "filename": {
+            "default": "",
+            "title": "Filename",
+            "type": "string"
+          },
+          "kind": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "school_essay",
+              "essay",
+              "presentation",
+              "email",
+              "social",
+              "fiction",
+              "general"
+            ],
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "title": "check_fileArguments"
+      }
+    },
+    {
+      "name": "compare",
+      "description": "Score an original and a rewrite side by side: AI score, verdict, pattern counts and whether the rewrite\npasses. Shows whether a rewrite now reads as human. `kind`: school_essay | essay | presentation | email | social | fiction | general | auto (guess)",
+      "inputSchema": {
+        "properties": {
+          "before": {
+            "title": "Before",
+            "type": "string"
+          },
+          "after": {
+            "title": "After",
+            "type": "string"
+          },
+          "kind": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "school_essay",
+              "essay",
+              "presentation",
+              "email",
+              "social",
+              "fiction",
+              "general"
+            ],
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "before",
+          "after"
+        ],
+        "type": "object",
+        "title": "compareArguments"
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "name": "humanize",
+      "description": "Rewrite a text so it no longer reads as AI-generated, checked by Desloppy after every round.",
+      "arguments": [
+        {
+          "name": "text",
+          "required": true
+        },
+        {
+          "name": "kind",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "uriTemplate": "desloppy://tips/{kind}",
+      "name": "tips",
+      "description": "Plain tips for writing that doesn't read as AI, for one kind of writing."
+    }
+  ]
+}
